@@ -55,8 +55,8 @@ Antes de começar, você vai precisar ter instalado em sua máquina:
 
 ### 1. Clone o repositório
 
-git clone 
-cd 
+git clone https://github.com/kaorishi11/dashboard_estoque.git
+cd dashboard_estoque
 
 ### 2. Instale as dependências
 
@@ -76,37 +76,6 @@ Execute os seguintes SQLs no Supabase:
 
 npm run dev
 
-## Estrutura do Projeto
-sistema-estoque/
-├── src/
-│   ├── components/
-│   │   └── Navbar.jsx
-│   ├── pages/
-│   │   ├── Login.jsx
-│   │   ├── Cadastro.jsx
-│   │   ├── Dashboard.jsx
-│   │   ├── Home.jsx
-│   │   ├── Novo.jsx
-│   │   ├── Editar.jsx
-│   │   └── Perfil.jsx
-│   ├── services/
-│   │   └── supabase.js
-│   ├── styles/
-│   │   ├── Login.css
-│   │   ├── Cadastro.css
-│   │   ├── Dashboard.css
-│   │   ├── Home.css
-│   │   ├── Novo.css
-│   │   ├── Editar.css
-│   │   └── Perfil.css
-│   ├── App.jsx
-│   └── main.jsx
-├── .env
-├── .gitignore
-├── package.json
-├── vite.config.js
-└── README.md
-
-## Respon
+## Desenvolvedor
 
 - kaorishi11
