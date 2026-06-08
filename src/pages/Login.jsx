@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../services/supabase";
 
+import "../styles/Login.css";
+
 export default function Login() {
   const navigate = useNavigate();
 

@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { FaHome, FaEdit, FaPlus, FaSignOutAlt } from "react-icons/fa";
+import { Link, useLocation } from "react-router-dom";
+import { FaTachometerAlt, FaBoxes, FaUser, FaSignOutAlt} from "react-icons/fa";
 import { supabase } from "../services/supabase";
 import "./Navbar.css";
 
 export default function Navbar() {
   const [usuario, setUsuario] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     async function carregarUsuario() {
@@ -36,11 +37,10 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar-user">
         <img
-          src={usuario?.foto || "https://via.placeholder.com/50"}
+          src={usuario?.foto || "https://via.placeholder.com/80"}
           alt="Usuário"
           className="navbar-avatar"
         />
-
         <div>
           <p className="navbar-label">Bem-vindo</p>
           <h3>{usuario?.nome || "Carregando..."}</h3>
@@ -48,18 +48,27 @@ export default function Navbar() {
       </div>
 
       <div className="navbar-links">
-        <Link to="/dashboard">
-          <FaHome />
+        <Link 
+          to="/home" 
+          className={location.pathname === "/home" ? "active" : ""}
+        >
+          <FaTachometerAlt />
           Dashboard
         </Link>
 
-        <Link to="/produtos">
-          <FaHome />
+        <Link 
+          to="/produtos"
+          className={location.pathname === "/produtos" ? "active" : ""}
+        >
+          <FaBoxes />
           Produtos
         </Link>
 
-        <Link to="/perfil">
-          <FaPlus />
+        <Link 
+          to="/perfil" 
+          className={location.pathname === "/perfil" ? "active" : ""}
+        >
+          <FaUser />
           Perfil
         </Link>
 

@@ -2,34 +2,12 @@ import { useEffect, useState } from "react";
 import { supabase } from "../services/supabase";
 import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
-import { 
-  FaBoxes, 
-  FaExclamationTriangle, 
-  FaMoneyBillWave,
-  FaChartLine
-} from "react-icons/fa";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement
-} from 'chart.js';
+import { FaBoxes, FaExclamationTriangle, FaMoneyBillWave, FaChartLine} from "react-icons/fa";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement} from 'chart.js';
 import { Bar, Pie } from 'react-chartjs-2';
 import "../styles/Dashboard.css";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement
-);
+ChartJS.register( CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -50,7 +28,6 @@ export default function Dashboard() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Carregar produtos do usuário
       const { data: produtos, error } = await supabase
         .from("produtos")
         .select("*")
@@ -58,7 +35,6 @@ export default function Dashboard() {
 
       if (error) throw error;
 
-      // Calcular estatísticas
       const baixoEstoque = produtos.filter(p => p.quantidade <= p.quantidade_minima);
       const valorTotal = produtos.reduce((total, p) => total + (p.preco * p.quantidade), 0);
 
@@ -78,7 +54,6 @@ export default function Dashboard() {
   }
 
   function prepararDadosGraficos(produtos) {
-    // Gráfico de barras - Top 5 categorias por quantidade
     const categoriasQuantidade = {};
     produtos.forEach(p => {
       categoriasQuantidade[p.categoria] = (categoriasQuantidade[p.categoria] || 0) + p.quantidade;
@@ -102,7 +77,6 @@ export default function Dashboard() {
       ],
     });
 
-    // Gráfico de pizza - Distribuição de produtos por categoria
     const categoriasCount = {};
     produtos.forEach(p => {
       categoriasCount[p.categoria] = (categoriasCount[p.categoria] || 0) + 1;
@@ -146,7 +120,6 @@ export default function Dashboard() {
           </Link>
         </div>
         
-        {/* Cards de estatísticas */}
         <div className="stats-grid">
           <div className="stat-card">
             <div className="stat-icon blue">
@@ -181,7 +154,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Gráficos */}
         <div className="charts-grid">
           <div className="chart-card">
             <h3>

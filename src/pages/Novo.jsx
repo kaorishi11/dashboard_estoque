@@ -1,4 +1,3 @@
-// Página para adicionar um novo produto
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../services/supabase'
@@ -24,7 +23,7 @@ export default function NovoProduto() {
             ...prev,
             [name]: value
         }))
-        // Limpar erro do campo ao digitar
+
         if (errors[name]) {
             setErrors(prev => ({
                 ...prev,
@@ -76,7 +75,6 @@ export default function NovoProduto() {
         setLoading(true)
 
         try {
-            // Pegar usuário logado
             const { data: { user }, error: userError } = await supabase.auth.getUser()
             
             if (userError) throw userError
@@ -86,7 +84,6 @@ export default function NovoProduto() {
                 return
             }
 
-            // Preparar dados para inserção
             const novoProduto = {
                 nome: formData.nome.trim(),
                 categoria: formData.categoria.trim(),
@@ -141,7 +138,7 @@ export default function NovoProduto() {
 
                 <form onSubmit={handleSubmit} className="novo-form">
                     <div className="form-grid">
-                        {/* Nome do Produto */}
+
                         <div className="form-group full-width">
                             <label htmlFor="nome">
                                 Nome do Produto *
@@ -159,7 +156,6 @@ export default function NovoProduto() {
                             />
                         </div>
 
-                        {/* Categoria */}
                         <div className="form-group">
                             <label htmlFor="categoria">
                                 Categoria *
@@ -190,7 +186,6 @@ export default function NovoProduto() {
                             </datalist>
                         </div>
 
-                        {/* Quantidade */}
                         <div className="form-group">
                             <label htmlFor="quantidade">
                                 Quantidade *
@@ -210,7 +205,6 @@ export default function NovoProduto() {
                             />
                         </div>
 
-                        {/* Preço */}
                         <div className="form-group">
                             <label htmlFor="preco">
                                 Preço (R$) *
@@ -230,7 +224,6 @@ export default function NovoProduto() {
                             />
                         </div>
 
-                        {/* Quantidade Mínima */}
                         <div className="form-group">
                             <label htmlFor="quantidade_minima">
                                 Quantidade Mínima
@@ -254,7 +247,6 @@ export default function NovoProduto() {
                         </div>
                     </div>
 
-                    {/* Resumo */}
                     {formData.nome && formData.preco && (
                         <div className="resumo-produto">
                             <h3>Resumo do Produto</h3>
@@ -285,7 +277,6 @@ export default function NovoProduto() {
                         </div>
                     )}
 
-                    {/* Botões */}
                     <div className="form-actions">
                         <button
                             type="button"

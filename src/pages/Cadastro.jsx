@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../services/supabase";
 
+import "../styles/Cadastro.css";
+
 export default function Cadastro() {
   const navigate = useNavigate();
 
@@ -14,7 +16,6 @@ export default function Cadastro() {
 
   async function cadastrar(e) {
     e.preventDefault();
-
     setLoading(true);
 
     try {

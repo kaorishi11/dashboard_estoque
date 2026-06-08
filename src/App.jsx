@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Editar from "./pages/Editar";
 import Novo from "./pages/Novo";
+import Perfil from "./pages/Perfil";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -73,6 +74,11 @@ export default function App() {
         <Route
           path="/editar"
           element={user ? <Editar /> : <Login />}
+        />
+
+        <Route
+          path="/perfil"
+          element={<Perfil/>}
         />
 
         <Route

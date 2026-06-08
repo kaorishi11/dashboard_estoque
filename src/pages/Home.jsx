@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../services/supabase'
 import { FaEdit, FaTrash, FaPlus, FaSearch, FaArrowLeft } from 'react-icons/fa'
+import Navbar from '../components/Navbar'
 import '../styles/Home.css'
 
 export default function Home() {
@@ -35,7 +36,6 @@ export default function Home() {
                 setProdutos(produtos)
                 setProdutosFiltrados(produtos)
                 
-                // Extrair categorias únicas para o filtro
                 const uniqueCategorias = [...new Set(produtos.map(p => p.categoria))]
                 setCategorias(uniqueCategorias)
             }
@@ -47,11 +47,9 @@ export default function Home() {
         }
     }
 
-    // Função de busca
     useEffect(() => {
         let resultados = produtos
         
-        // Filtrar por nome
         if (busca) {
             resultados = resultados.filter(produto =>
                 produto.nome.toLowerCase().includes(busca.toLowerCase()) ||
@@ -59,7 +57,6 @@ export default function Home() {
             )
         }
         
-        // Filtrar por categoria
         if (categoriaFiltro) {
             resultados = resultados.filter(produto =>
                 produto.categoria === categoriaFiltro
@@ -80,7 +77,7 @@ export default function Home() {
                 if (error) throw error
                 
                 alert('Produto excluído com sucesso!')
-                getProdutos() // Recarregar a lista
+                getProdutos()
             } catch (error) {
                 console.error('Erro ao excluir produto:', error)
                 alert('Erro ao excluir produto')
@@ -92,15 +89,15 @@ export default function Home() {
         navigate(`/editar?id=${id}`)
     }
 
-    function getStatusColor(quantidade) {
+    function getStatusColor(quantidade, quantidade_minima) {
         if (quantidade === 0) return 'status-zero'
-        if (quantidade <= 5) return 'status-low'
+        if (quantidade <= quantidade_minima) return 'status-low'
         return 'status-ok'
     }
 
-    function getStatusTexto(quantidade) {
+    function getStatusTexto(quantidade, quantidade_minima) {
         if (quantidade === 0) return 'Sem estoque'
-        if (quantidade <= 5) return 'Estoque baixo'
+        if (quantidade <= quantidade_minima) return 'Estoque baixo'
         return 'Estoque normal'
     }
 
@@ -111,144 +108,139 @@ export default function Home() {
 
     return (
         <div className="home-container">
-            <div className="home-header">
-                <Link to="/dashboard" className="btn-back">
-                    <FaArrowLeft /> Voltar ao Dashboard
-                </Link>
-                <h1>Lista de Produtos</h1>
-                <Link to="/novo" className="btn-add">
-                    <FaPlus /> Adicionar Produto
-                </Link>
-            </div>
-
-            {/* Filtros */}
-            <div className="filtros-container">
-                <div className="search-box">
-                    <FaSearch className="search-icon" />
-                    <input
-                        type="text"
-                        placeholder="Buscar por nome ou categoria..."
-                        value={busca}
-                        onChange={(e) => setBusca(e.target.value)}
-                        className="search-input"
-                    />
+            <Navbar />
+            
+            <div className="home-content">
+                <div className="home-header">
+                    <h1>Lista de Produtos</h1>
                 </div>
 
-                <div className="filtro-categoria">
-                    <select
-                        value={categoriaFiltro}
-                        onChange={(e) => setCategoriaFiltro(e.target.value)}
-                        className="categoria-select"
-                    >
-                        <option value="">Todas as categorias</option>
-                        {categorias.map(cat => (
-                            <option key={cat} value={cat}>{cat}</option>
-                        ))}
-                    </select>
+                <div className="filtros-container">
+                    <div className="search-box">
+                        <FaSearch className="search-icon" />
+                        <input
+                            type="text"
+                            placeholder="Buscar por nome ou categoria..."
+                            value={busca}
+                            onChange={(e) => setBusca(e.target.value)}
+                            className="search-input"
+                        />
+                    </div>
+
+                    <div className="filtro-categoria">
+                        <select
+                            value={categoriaFiltro}
+                            onChange={(e) => setCategoriaFiltro(e.target.value)}
+                            className="categoria-select"
+                        >
+                            <option value="">Todas as categorias</option>
+                            {categorias.map(cat => (
+                                <option key={cat} value={cat}>{cat}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {(busca || categoriaFiltro) && (
+                        <button onClick={limparFiltros} className="btn-clear-filters">
+                            Limpar filtros
+                        </button>
+                    )}
+                </div>
+                
+                <div className="resumo">
+                    <p>Total de produtos: <strong>{produtosFiltrados.length}</strong></p>
+                    {busca && <p>Resultados encontrados: <strong>{produtosFiltrados.length}</strong></p>}
                 </div>
 
-                {(busca || categoriaFiltro) && (
-                    <button onClick={limparFiltros} className="btn-clear-filters">
-                        Limpar filtros
-                    </button>
+                {loading ? (
+                    <div className="loading-container">
+                        <div className="loading-spinner"></div>
+                        <p>Carregando produtos...</p>
+                    </div>
+                ) : (
+                    <>
+                        {produtosFiltrados.length === 0 ? (
+                            <div className="empty-state">
+                                <p>Nenhum produto encontrado.</p>
+                                {busca || categoriaFiltro ? (
+                                    <button onClick={limparFiltros} className="btn-clear">
+                                        Limpar filtros
+                                    </button>
+                                ) : (
+                                    <Link to="/novo" className="btn-add-empty">
+                                        Adicionar primeiro produto
+                                    </Link>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="table-responsive">
+                                <table className="produtos-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Produto</th>
+                                            <th>Categoria</th>
+                                            <th>Quantidade</th>
+                                            <th>Preço Unitário</th>
+                                            <th>Valor Total</th>
+                                            <th>Status</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {produtosFiltrados.map((produto) => (
+                                            <tr key={produto.id}>
+                                                <td className="produto-nome">
+                                                    <strong>{produto.nome}</strong>
+                                                </td>
+                                                <td>
+                                                    <span className="categoria-badge">
+                                                        {produto.categoria}
+                                                    </span>
+                                                </td>
+                                                <td className={`quantidade-cell ${getStatusColor(produto.quantidade, produto.quantidade_minima)}`}>
+                                                    <strong>{produto.quantidade}</strong>
+                                                    {produto.quantidade_minima > 0 && (
+                                                        <small> (min: {produto.quantidade_minima})</small>
+                                                    )}
+                                                </td>
+                                                <td>
+                                                    R$ {produto.preco.toFixed(2)}
+                                                </td>
+                                                <td>
+                                                    <strong>
+                                                        R$ {(produto.preco * produto.quantidade).toFixed(2)}
+                                                    </strong>
+                                                </td>
+                                                <td>
+                                                    <span className={`status-badge ${getStatusColor(produto.quantidade, produto.quantidade_minima)}`}>
+                                                        {getStatusTexto(produto.quantidade, produto.quantidade_minima)}
+                                                    </span>
+                                                </td>
+                                                <td className="acoes">
+                                                    <button
+                                                        onClick={() => editarProduto(produto.id)}
+                                                        className="btn-edit"
+                                                        title="Editar"
+                                                    >
+                                                        <FaEdit />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => excluirProduto(produto.id, produto.nome)}
+                                                        className="btn-delete"
+                                                        title="Excluir"
+                                                    >
+                                                        <FaTrash />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
-
-            {/* Resumo */}
-            <div className="resumo">
-                <p>Total de produtos: <strong>{produtosFiltrados.length}</strong></p>
-                {busca && <p>Resultados encontrados: <strong>{produtosFiltrados.length}</strong></p>}
-            </div>
-
-            {/* Tabela de produtos */}
-            {loading ? (
-                <div className="loading-container">
-                    <div className="loading-spinner"></div>
-                    <p>Carregando produtos...</p>
-                </div>
-            ) : (
-                <>
-                    {produtosFiltrados.length === 0 ? (
-                        <div className="empty-state">
-                            <p>Nenhum produto encontrado.</p>
-                            {busca || categoriaFiltro ? (
-                                <button onClick={limparFiltros} className="btn-clear">
-                                    Limpar filtros
-                                </button>
-                            ) : (
-                                <Link to="/novo" className="btn-add-empty">
-                                    Adicionar primeiro produto
-                                </Link>
-                            )}
-                        </div>
-                    ) : (
-                        <div className="table-responsive">
-                            <table className="produtos-table">
-                                <thead>
-                                    <tr>
-                                        <th>Produto</th>
-                                        <th>Categoria</th>
-                                        <th>Quantidade</th>
-                                        <th>Preço Unitário</th>
-                                        <th>Valor Total</th>
-                                        <th>Status</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {produtosFiltrados.map((produto) => (
-                                        <tr key={produto.id}>
-                                            <td className="produto-nome">
-                                                <strong>{produto.nome}</strong>
-                                            </td>
-                                            <td>
-                                                <span className="categoria-badge">
-                                                    {produto.categoria}
-                                                </span>
-                                            </td>
-                                            <td className={`quantidade-cell ${getStatusColor(produto.quantidade)}`}>
-                                                <strong>{produto.quantidade}</strong>
-                                                {produto.quantidade_minima > 0 && (
-                                                    <small> (min: {produto.quantidade_minima})</small>
-                                                )}
-                                            </td>
-                                            <td>
-                                                R$ {produto.preco.toFixed(2)}
-                                            </td>
-                                            <td>
-                                                <strong>
-                                                    R$ {(produto.preco * produto.quantidade).toFixed(2)}
-                                                </strong>
-                                            </td>
-                                            <td>
-                                                <span className={`status-badge ${getStatusColor(produto.quantidade)}`}>
-                                                    {getStatusTexto(produto.quantidade)}
-                                                </span>
-                                            </td>
-                                            <td className="acoes">
-                                                <button
-                                                    onClick={() => editarProduto(produto.id)}
-                                                    className="btn-edit"
-                                                    title="Editar"
-                                                >
-                                                    <FaEdit />
-                                                </button>
-                                                <button
-                                                    onClick={() => excluirProduto(produto.id, produto.nome)}
-                                                    className="btn-delete"
-                                                    title="Excluir"
-                                                >
-                                                    <FaTrash />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
-                </>
-            )}
         </div>
     )
 }

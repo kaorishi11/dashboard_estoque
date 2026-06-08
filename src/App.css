@@ -1,4 +1,3 @@
-/* Reset e variáveis globais */
 :root {
   --accent: #667eea;
   --accent-bg: rgba(102, 126, 234, 0.1);
@@ -239,7 +238,6 @@ body {
   border-right-color: var(--border);
 }
 
-/* Container principal para garantir que não haja margens */
 .app-container,
 .main-container,
 .root {
@@ -250,13 +248,11 @@ body {
   overflow-x: hidden;
 }
 
-/* Remove margens padrão de elementos */
 h1, h2, h3, h4, h5, h6, p, div, section, article {
   margin: 0;
   padding: 0;
 }
 
-/* Garante que o conteúdo não ultrapasse a tela */
 img, video, iframe {
   max-width: 100%;
   height: auto;

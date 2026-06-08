@@ -142,7 +142,6 @@
     margin-top: 0.25rem;
 }
 
-/* Status do Produto */
 .status-produto {
     background: #f8f9fa;
     border-radius: 15px;
@@ -189,7 +188,6 @@
     color: #666;
 }
 
-/* Resumo do Produto */
 .resumo-produto {
     background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
     border-radius: 15px;
@@ -226,7 +224,6 @@
     color: white;
 }
 
-/* Botões */
 .form-actions {
     display: flex;
     gap: 1rem;
@@ -275,7 +272,6 @@
     cursor: not-allowed;
 }
 
-/* Loading */
 .loading-container {
     background: white;
     border-radius: 20px;
@@ -298,7 +294,6 @@
     to { transform: rotate(360deg); }
 }
 
-/* Spinner pequeno */
 .spinner-small {
     width: 16px;
     height: 16px;
@@ -308,7 +303,6 @@
     animation: spin 0.8s linear infinite;
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
     .editar-container {
         padding: 1rem;
