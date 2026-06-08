@@ -1,61 +1,165 @@
+/* Sidebar estilo lateral */
 .navbar {
-  background: #0f172a;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   color: white;
-
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-
-  padding: 15px 30px;
-
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  overflow-y: auto;
 }
 
+/* Header do usuário na sidebar */
 .navbar-user {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 12px;
+  padding: 30px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .navbar-avatar {
-  width: 50px;
-  height: 50px;
-
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   object-fit: cover;
-
-  border: 2px solid white;
+  border: 3px solid #38bdf8;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .navbar-label {
   font-size: 12px;
   opacity: 0.7;
+  margin-bottom: 4px;
 }
 
+.navbar-user h3 {
+  font-size: 16px;
+  margin: 0;
+  color: white;
+}
+
+/* Links de navegação */
 .navbar-links {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 20px;
+  flex: 1;
 }
 
 .navbar-links a,
 .logout-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-
-  color: white;
+  gap: 12px;
+  padding: 12px 16px;
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
-
   background: none;
   border: none;
   cursor: pointer;
-
   font-size: 15px;
-  transition: 0.2s;
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  width: 100%;
+  text-align: left;
+}
+
+.navbar-links a svg,
+.logout-btn svg {
+  font-size: 18px;
+  min-width: 20px;
 }
 
 .navbar-links a:hover,
 .logout-btn:hover {
+  background: rgba(56, 189, 248, 0.1);
   color: #38bdf8;
+  transform: translateX(5px);
+}
+
+/* Link ativo */
+.navbar-links a.active {
+  background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
+  color: white;
+  box-shadow: 0 4px 10px rgba(56, 189, 248, 0.3);
+}
+
+/* Botão de logout no final */
+.logout-btn {
+  margin-top: auto;
+  margin-bottom: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* Scrollbar personalizada */
+.navbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.navbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.navbar::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.5);
+  border-radius: 10px;
+}
+
+.navbar::-webkit-scrollbar-thumb:hover {
+  background: #38bdf8;
+}
+
+/* Responsivo para mobile */
+@media (max-width: 768px) {
+  .navbar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    width: 260px;
+  }
+
+  .navbar.open {
+    transform: translateX(0);
+  }
+
+  /* Botão para abrir sidebar no mobile */
+  .menu-toggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1001;
+    background: #0f172a;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Desktop - conteúdo principal terá margem lateral */
+@media (min-width: 769px) {
+  body {
+    margin-left: 280px;
+  }
 }
